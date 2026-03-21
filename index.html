@@ -151,11 +151,80 @@
   .btn-add-article:hover { border-color: var(--gold); background: rgba(184,150,90,0.05); }
   .admin-hint { text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 1px; padding: 20px; }
 
+  /* CONTACT CARD */
+  .contact-section { padding: 80px 20px; background: var(--cream); text-align: center; }
+  .contact-section .section-label { font-size: 10px; letter-spacing: 5px; color: var(--gold); text-transform: uppercase; margin-bottom: 40px; }
+  .contact-card {
+    display: inline-block;
+    background: var(--dark);
+    padding: 48px 56px;
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .contact-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .contact-card::after {
+    content: '✦';
+    position: absolute;
+    bottom: -20px; right: 20px;
+    font-size: 6rem;
+    color: rgba(184,150,90,0.06);
+    font-family: 'Playfair Display', serif;
+  }
+  .contact-card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .contact-card-name em { color: var(--gold); font-style: italic; }
+  .contact-card-sub {
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .contact-divider { width: 40px; height: 1px; background: var(--gold); margin: 0 auto 32px; opacity: 0.5; }
+  .contact-line {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .contact-line:last-child { margin-bottom: 0; }
+  .contact-line:hover { opacity: 0.75; }
+  .contact-icon {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(184,150,90,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    color: var(--gold);
+  }
+  .contact-info { text-align: left; }
+  .contact-info-label { font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .contact-info-value { font-size: 14px; color: var(--cream); letter-spacing: 0.5px; }
+
   @media (max-width: 700px) {
     .about { grid-template-columns: 1fr; }
     .about-deco { display: none; }
     nav { gap: 20px; }
     .card-wrap { width: 280px; height: 370px; }
+    .contact-card { padding: 36px 28px; }
   }
 </style>
 </head>
@@ -188,6 +257,23 @@
     <div class="collection-row">
       <input type="text" id="collectionInput" placeholder="ex: Nouveautés Été 2025">
       <button class="btn-ok" id="collectionBtn" onclick="applyCollection()">OK</button>
+    </div>
+  </div>
+  <div class="admin-section">
+    <div class="admin-section-title">Carte de contact</div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Téléphone</div>
+      <div class="collection-row">
+        <input type="tel" id="contactPhoneInput" placeholder="06 XX XX XX XX">
+        <button class="btn-ok" id="contactPhoneBtn" onclick="applyContact('phone')">OK</button>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Email</div>
+      <div class="collection-row">
+        <input type="email" id="contactEmailInput" placeholder="contact@lavitrinedepontaillac.fr">
+        <button class="btn-ok" id="contactEmailBtn" onclick="applyContact('email')">OK</button>
+      </div>
     </div>
   </div>
   <div class="admin-articles" id="adminGrid"></div>
@@ -231,6 +317,29 @@
   </div>
   <div class="about-deco">Mode</div>
 </div>
+
+<section class="contact-section" id="contact">
+  <p class="section-label">Nous contacter</p>
+  <div class="contact-card">
+    <div class="contact-card-name">La <em>Vitrine</em> de Pontaillac</div>
+    <div class="contact-card-sub">Prêt-à-porter féminin · Royan</div>
+    <div class="contact-divider"></div>
+    <a class="contact-line" id="contact-phone-link" href="#">
+      <div class="contact-icon">✆</div>
+      <div class="contact-info">
+        <div class="contact-info-label">Téléphone</div>
+        <div class="contact-info-value" id="contact-phone-val">…</div>
+      </div>
+    </a>
+    <a class="contact-line" id="contact-email-link" href="#">
+      <div class="contact-icon">✉</div>
+      <div class="contact-info">
+        <div class="contact-info-label">Email</div>
+        <div class="contact-info-value" id="contact-email-val">…</div>
+      </div>
+    </a>
+  </div>
+</section>
 
 <footer>
   <p class="footer-brand">La Vitrine de Pontaillac</p>
@@ -474,6 +583,35 @@
   }
 
 
+  function setContactUI(phone, email) {
+    document.getElementById('contact-phone-val').textContent = phone;
+    document.getElementById('contact-email-val').textContent = email;
+    document.getElementById('contact-phone-link').href = `tel:${phone.replace(/\s/g,'')}`;
+    document.getElementById('contact-email-link').href = `mailto:${email}`;
+  }
+
+  async function applyContact(type) {
+    const isPhone = type === 'phone';
+    const inputId = isPhone ? 'contactPhoneInput' : 'contactEmailInput';
+    const btnId   = isPhone ? 'contactPhoneBtn'  : 'contactEmailBtn';
+    const key     = isPhone ? 'contact_phone'    : 'contact_email';
+    const val     = document.getElementById(inputId).value.trim();
+    if (!val) return;
+    const btn = document.getElementById(btnId);
+    btn.textContent = '…'; btn.disabled = true;
+    try {
+      await dbPatch('settings', `key=eq.${key}`, { value: val });
+      const phone = isPhone ? val : document.getElementById('contact-phone-val').textContent;
+      const email = isPhone ? document.getElementById('contact-email-val').textContent : val;
+      setContactUI(phone, email);
+      btn.textContent = '✓'; btn.style.background = '#27ae60';
+      setTimeout(() => { btn.textContent = 'OK'; btn.style.background = ''; btn.disabled = false; }, 2000);
+    } catch(e) {
+      btn.textContent = '❌'; btn.disabled = false;
+    }
+  }
+
+
     const val = document.getElementById('collectionInput').value.trim();
     if (!val) return;
     const btn = document.getElementById('collectionBtn');
@@ -502,6 +640,8 @@
       document.getElementById('pwdModal').classList.remove('active');
       renderAdmin();
       document.getElementById('collectionInput').value = document.getElementById('collectionLabel').textContent;
+      document.getElementById('contactPhoneInput').value = document.getElementById('contact-phone-val').textContent;
+      document.getElementById('contactEmailInput').value = document.getElementById('contact-email-val').textContent;
       document.getElementById('adminOverlay').classList.add('active');
     } else {
       document.getElementById('pwdError').style.display = 'block';
@@ -516,10 +656,12 @@
     try {
       const [articles, settings] = await Promise.all([
         dbGet('articles', 'order=id.asc'),
-        dbGet('settings', 'key=eq.collection_label')
+        dbGet('settings', '')
       ]);
       items = articles;
-      document.getElementById('collectionLabel').textContent = settings[0]?.value || 'Collection Printemps 2025';
+      const get = key => settings.find(s => s.key === key)?.value || '';
+      document.getElementById('collectionLabel').textContent = get('collection_label') || 'Collection Printemps 2025';
+      setContactUI(get('contact_phone') || '06 XX XX XX XX', get('contact_email') || 'contact@lavitrinedepontaillac.fr');
       renderVitrine();
     } catch(e) {
       document.getElementById('collectionLabel').textContent = 'Collection Printemps 2025';
