@@ -3,7 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>La Vitrine de Pontaillac — Prêt-à-Porter</title>
+<title>La Vitrine de Pontaillac — Prêt-à-Porter Féminin Royan</title>
+<meta name="description" content="La Vitrine de Pontaillac, boutique de prêt-à-porter féminin et accessoires à Royan, à deux pas de la plage et du Casino Barrière. Découvrez notre sélection au 215 Avenue de Pontaillac, 17200 Royan.">
+<meta name="keywords" content="boutique vêtements femme Royan, prêt-à-porter féminin Royan, mode femme Pontaillac, accessoires mode Royan, boutique bord de mer Royan, shopping Royan plage, mode Pontaillac Royan, boutique près casino Royan, vêtements femme Charente-Maritime, boutique mode Saint-Georges-de-Didonne, shopping Vaux-sur-Mer">
+<meta name="author" content="La Vitrine de Pontaillac">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.lavitrinedepontaillac.fr">
+
+<!-- Géolocalisation -->
+<meta name="geo.region" content="FR-17">
+<meta name="geo.placename" content="Royan">
+<meta name="geo.position" content="45.6233;-1.0189">
+<meta name="ICBM" content="45.6233, -1.0189">
+
+<!-- Open Graph -->
+<meta property="og:title" content="La Vitrine de Pontaillac — Mode Féminine à Royan">
+<meta property="og:description" content="Boutique de prêt-à-porter féminin et accessoires à Royan, à deux pas de la plage et du Casino Barrière. Nouvelles pièces régulièrement au 215 Av. de Pontaillac.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.lavitrinedepontaillac.fr">
+<meta property="og:locale" content="fr_FR">
+
+<!-- Données structurées Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ClothingStore",
+  "name": "La Vitrine de Pontaillac",
+  "description": "Boutique de prêt-à-porter féminin et accessoires à Royan, à deux pas de la plage de Pontaillac et du Casino Barrière",
+  "url": "https://www.lavitrinedepontaillac.fr",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "215 Avenue de Pontaillac",
+    "addressLocality": "Royan",
+    "postalCode": "17200",
+    "addressCountry": "FR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 45.6233,
+    "longitude": -1.0189
+  },
+  "areaServed": ["Royan", "Pontaillac", "Saint-Georges-de-Didonne", "Vaux-sur-Mer", "Meschers-sur-Gironde", "Charente-Maritime"],
+  "amenityFeature": [
+    { "@type": "LocationFeatureSpecification", "name": "Proche plage de Pontaillac", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Proche Casino Barrière Royan", "value": true }
+  ]
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -193,7 +239,7 @@
   <div class="pwd-box">
     <h3>Panneau Administration</h3>
     <p>Mot de passe requis</p>
-    <input type="password" id="pwdInput" placeholder="••••••••" onkeydown="if(event.key==='Enter') checkPwd()">
+    <input type="password" id="pwdInput" placeholder="Code boutique" onkeydown="if(event.key==='Enter') checkPwd()">
     <button onclick="checkPwd()">Accéder</button>
     <p class="pwd-error" id="pwdError">Mot de passe incorrect</p>
     <p style="margin-top:16px;font-size:10px;color:#bbb;cursor:pointer" onclick="closePwd()">Annuler</p>
@@ -264,7 +310,8 @@
     <h3>Une boutique avec du caractère</h3>
     <p>Nous sélectionnons pour vous des pièces de qualité, alliant élégance et confort du quotidien. Chaque vêtement est choisi avec soin pour correspondre à toutes les silhouettes et toutes les occasions.</p>
     <p style="margin-top:24px;font-size:0.95rem;line-height:1.9;color:rgba(247,243,238,0.55);">
-      📍 215 Avenue de Pontaillac<br>17200 Royan, France
+      📍 215 Avenue de Pontaillac<br>17200 Royan, France<br>
+      <span style="font-size:0.85rem;color:rgba(184,150,90,0.7);">À deux pas de la plage et du Casino Barrière</span>
     </p>
   </div>
   <div class="about-deco">Mode</div>
@@ -309,12 +356,39 @@
 
   const PWD_HASH = '0e214538b174f62a96ccf1a9ac7254b364c3769308e709e65d812118e10c68d5';
 
+  // Clé anon pour la lecture publique uniquement
   const H = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
   let items = [];
+  let authToken = null; // Token JWT de l'utilisateur admin
+
+  // Identifiants admin Supabase (utilisateur authentifié pour l'écriture)
+  const ADMIN_EMAIL = 'karl-nicolas.brigy@orange.fr';
+  // Le mot de passe admin Supabase est demandé à la connexion et jamais stocké
 
   async function sha256(str) {
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // Headers d'écriture avec le token JWT de l'utilisateur admin
+  function authHeaders() {
+    return {
+      'apikey': SUPA_KEY,
+      'Authorization': 'Bearer ' + (authToken || SUPA_KEY),
+      'Content-Type': 'application/json'
+    };
+  }
+
+  async function loginSupabase(password) {
+    const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: ADMIN_EMAIL, password })
+    });
+    if (!r.ok) return false;
+    const data = await r.json();
+    authToken = data.access_token;
+    return true;
   }
 
   async function dbGet(table, params) {
@@ -324,7 +398,7 @@
   async function dbPatch(table, filter, body) {
     await fetch(`${SUPA_URL}/rest/v1/${table}?${filter}`, {
       method: 'PATCH',
-      headers: { ...H, 'Prefer': 'return=minimal' },
+      headers: { ...authHeaders(), 'Prefer': 'return=minimal' },
       body: JSON.stringify(body)
     });
   }
@@ -334,7 +408,7 @@
       method: 'POST',
       headers: {
         'apikey': SUPA_KEY,
-        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Authorization': 'Bearer ' + (authToken || SUPA_KEY),
         'Content-Type': 'image/jpeg',
         'Cache-Control': '3600',
         'x-upsert': 'true'
@@ -490,14 +564,14 @@
         if (path) {
           await fetch(`${SUPA_URL}/storage/v1/object/${BUCKET}/${path}`, {
             method: 'DELETE',
-            headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+            headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + (authToken || SUPA_KEY) }
           });
         }
       }
       // Supprimer l'article en base
       await fetch(`${SUPA_URL}/rest/v1/articles?id=eq.${i}`, {
         method: 'DELETE',
-        headers: { ...H, 'Prefer': 'return=minimal' }
+        headers: { ...authHeaders(), 'Prefer': 'return=minimal' }
       });
       items = items.filter(x => x.id !== i);
       renderVitrine();
@@ -589,6 +663,18 @@
     const val = document.getElementById('pwdInput').value;
     const hash = await sha256(val);
     if (hash === PWD_HASH) {
+      const btn = document.querySelector('.pwd-box button');
+      btn.textContent = '⏳ Connexion…';
+      btn.disabled = true;
+      // Connexion Supabase avec le mot de passe de la boutique comme mot de passe Supabase
+      const ok = await loginSupabase(val);
+      btn.textContent = 'Accéder';
+      btn.disabled = false;
+      if (!ok) {
+        document.getElementById('pwdError').textContent = 'Erreur de connexion — réessayez';
+        document.getElementById('pwdError').style.display = 'block';
+        return;
+      }
       document.getElementById('pwdModal').classList.remove('active');
       renderAdmin();
       document.getElementById('collectionInput').value = document.getElementById('collectionLabel').textContent;
@@ -596,6 +682,7 @@
       document.getElementById('contactEmailInput').value = document.getElementById('contact-email-val').textContent;
       document.getElementById('adminOverlay').classList.add('active');
     } else {
+      document.getElementById('pwdError').textContent = 'Mot de passe incorrect';
       document.getElementById('pwdError').style.display = 'block';
       document.getElementById('pwdInput').value = '';
     }
