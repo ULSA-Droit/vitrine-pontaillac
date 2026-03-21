@@ -120,8 +120,6 @@
   .collection-row input:focus { border-color: var(--gold); }
   .btn-ok { background: var(--dark); color: var(--gold); border: none; padding: 12px 18px; font-size: 13px; cursor: pointer; border-radius: 4px; font-family: 'Montserrat', sans-serif; flex-shrink: 0; min-width: 52px; }
   .admin-articles { padding: 16px 20px; }
-
-  /* ACCORDION */
   .acc-card { border: 1px solid rgba(184,150,90,0.25); border-radius: 10px; margin-bottom: 12px; overflow: hidden; background: #fff; }
   .acc-card.open { border-color: var(--gold); }
   .acc-header { display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -133,8 +131,6 @@
   .acc-card.open .acc-arrow { transform: rotate(180deg); }
   .acc-body { display: none; padding: 0 16px 18px; border-top: 1px solid rgba(184,150,90,0.15); }
   .acc-card.open .acc-body { display: block; }
-
-  /* PHOTO ZONE */
   .photo-zone { border: 2px dashed rgba(184,150,90,0.45); border-radius: 8px; padding: 20px; text-align: center; margin: 14px 0 10px; cursor: pointer; position: relative; background: #faf8f5; transition: border-color .2s; }
   .photo-zone:hover { border-color: var(--gold); }
   .photo-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -142,8 +138,6 @@
   .photo-zone p { font-size: 13px; color: var(--dark); font-weight: 500; margin-bottom: 2px; }
   .photo-zone small { font-size: 11px; color: var(--muted); }
   .upload-info { font-size: 11px; color: var(--gold); letter-spacing: 1px; text-align: center; min-height: 18px; margin-bottom: 10px; }
-
-  /* FIELDS */
   .acc-field { margin-bottom: 14px; }
   .acc-field label { display: block; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
   .acc-field input { width: 100%; border: 1px solid #e0dbd4; border-radius: 6px; padding: 13px 14px; font-family: 'Montserrat', sans-serif; font-size: 14px; outline: none; color: var(--dark); background: #fff; transition: border-color .2s; }
@@ -163,14 +157,12 @@
 </head>
 <body>
 
-<!-- LOADING -->
 <div id="loadingScreen">
   <h2>La <em>Vitrine</em> de Pontaillac</h2>
   <p>Chargement en cours</p>
   <div class="loader-bar"></div>
 </div>
 
-<!-- PASSWORD MODAL -->
 <div class="pwd-modal" id="pwdModal">
   <div class="pwd-box">
     <h3>Panneau Administration</h3>
@@ -182,7 +174,6 @@
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-topbar">
     <div class="admin-topbar-title">✦ <span>Gestion</span> Vitrine</div>
@@ -199,7 +190,6 @@
   <div class="admin-hint">Appuyez sur un article pour le modifier</div>
 </div>
 
-<!-- HEADER -->
 <header>
   <p class="logo-eyebrow" id="collectionLabel">…</p>
   <h1>La <em>Vitrine</em> de Pontaillac</h1>
@@ -244,13 +234,20 @@
 <button class="admin-btn" onclick="openAdminRequest()">⚙ Admin</button>
 
 <script>
-  const SUPA_URL  = 'https://slmhdunijukcakntcxgp.supabase.co';
-  const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsbWhkdW5panVrY2FrbnRjeGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDA0MTAsImV4cCI6MjA4OTY3NjQxMH0.hsj_p-GXLTioIurPFI9Lsf9XGwpzi9iHhfYJTQxb9JA';
-  const BUCKET    = 'vitrine-photos';
-  const ADMIN_PWD = 'boutique2025';
+  const SUPA_URL = 'https://slmhdunijukcakntcxgp.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsbWhkdW5panVrY2FrbnRjeGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDA0MTAsImV4cCI6MjA4OTY3NjQxMH0.hsj_p-GXLTioIurPFI9Lsf9XGwpzi9iHhfYJTQxb9JA';
+  const BUCKET   = 'vitrine-photos';
+
+  // Mot de passe hashé SHA-256 (LIV2021)
+  const PWD_HASH = '0e214538b174f62a96ccf1a9ac7254b364c3769308e709e65d812118e10c68d5';
 
   const H = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
   let items = [];
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
 
   async function dbGet(table, params) {
     const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${params}`, { headers: H });
@@ -380,7 +377,6 @@
       info.textContent = '📸 Photo uploadée — appuyez sur Appliquer pour sauvegarder';
     } catch(e) {
       zone.querySelector('p').textContent = '❌ Erreur — réessayez';
-      info.textContent = '';
     }
     btn.disabled = false;
   }
@@ -431,8 +427,11 @@
     document.getElementById('pwdError').style.display = 'none';
     setTimeout(() => document.getElementById('pwdInput').focus(), 100);
   }
-  function checkPwd() {
-    if (document.getElementById('pwdInput').value === ADMIN_PWD) {
+
+  async function checkPwd() {
+    const val = document.getElementById('pwdInput').value;
+    const hash = await sha256(val);
+    if (hash === PWD_HASH) {
       document.getElementById('pwdModal').classList.remove('active');
       renderAdmin();
       document.getElementById('collectionInput').value = document.getElementById('collectionLabel').textContent;
@@ -442,6 +441,7 @@
       document.getElementById('pwdInput').value = '';
     }
   }
+
   function closePwd() { document.getElementById('pwdModal').classList.remove('active'); }
   function closeAdmin() { document.getElementById('adminOverlay').classList.remove('active'); }
 
