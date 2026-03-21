@@ -388,157 +388,25 @@
     margin-bottom: 12px;
   }
 
-  /* ── ADMIN TOGGLE ── */
+  /* ── ADMIN BUTTON ── */
   .admin-btn {
     position: fixed;
     bottom: 24px; right: 24px;
     background: var(--dark);
     color: var(--gold);
     border: 1px solid var(--gold);
-    padding: 10px 18px;
+    padding: 14px 20px;
     font-size: 10px;
     letter-spacing: 2px;
     text-transform: uppercase;
     cursor: pointer;
     z-index: 1000;
     font-family: 'Montserrat', sans-serif;
+    border-radius: 50px;
     transition: background .2s, color .2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   }
-
-  .admin-btn:hover {
-    background: var(--gold);
-    color: var(--dark);
-  }
-
-  /* ── ADMIN PANEL ── */
-  .admin-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(26,23,20,0.92);
-    z-index: 2000;
-    overflow-y: auto;
-  }
-
-  .admin-overlay.active { display: block; }
-
-  .admin-panel {
-    background: #fff;
-    max-width: 860px;
-    margin: 40px auto;
-    border-top: 4px solid var(--gold);
-    padding: 40px;
-  }
-
-  .admin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-  }
-
-  .admin-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-weight: 400;
-  }
-
-  .admin-close {
-    background: none;
-    border: 1px solid #ccc;
-    padding: 8px 14px;
-    cursor: pointer;
-    font-size: 12px;
-    letter-spacing: 1px;
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  .admin-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-
-  .admin-card {
-    border: 1px solid #e0e0e0;
-    padding: 20px;
-    position: relative;
-  }
-
-  .admin-card .card-num {
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .admin-preview {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    display: block;
-    margin-bottom: 14px;
-    background: #f0ede8;
-  }
-
-  .admin-field {
-    margin-bottom: 12px;
-  }
-
-  .admin-field label {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: 4px;
-  }
-
-  .admin-field input {
-    width: 100%;
-    border: 1px solid #e0e0e0;
-    padding: 8px 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    outline: none;
-    transition: border-color .2s;
-  }
-
-  .admin-field input:focus { border-color: var(--gold); }
-
-  .admin-field input[type="file"] {
-    padding: 6px;
-    font-size: 11px;
-    cursor: pointer;
-  }
-
-  .btn-apply {
-    width: 100%;
-    background: var(--dark);
-    color: var(--cream);
-    border: none;
-    padding: 10px;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
-    margin-top: 4px;
-    transition: background .2s;
-  }
-
-  .btn-apply:hover { background: var(--gold); }
-
-  .admin-footer {
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid #e0e0e0;
-    text-align: center;
-    font-size: 11px;
-    color: #aaa;
-    letter-spacing: 1px;
-  }
+  .admin-btn:hover { background: var(--gold); color: var(--dark); }
 
   /* ── PASSWORD MODAL ── */
   .pwd-modal {
@@ -549,58 +417,56 @@
     z-index: 3000;
     align-items: center;
     justify-content: center;
+    padding: 20px;
   }
-
   .pwd-modal.active { display: flex; }
 
   .pwd-box {
     background: var(--cream);
-    padding: 48px 40px;
+    padding: 40px 28px;
     text-align: center;
-    width: 360px;
+    width: 100%;
+    max-width: 340px;
     border-top: 3px solid var(--gold);
+    border-radius: 4px;
   }
-
   .pwd-box h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    margin-bottom: 8px;
+    font-size: 1.3rem;
+    margin-bottom: 6px;
   }
-
   .pwd-box p {
     font-size: 11px;
     color: var(--muted);
     letter-spacing: 1px;
     margin-bottom: 24px;
   }
-
   .pwd-box input {
     width: 100%;
-    border: 1px solid #ccc;
+    border: none;
     border-bottom: 2px solid var(--gold);
-    padding: 12px;
+    padding: 14px 12px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
+    font-size: 20px;
     outline: none;
     background: transparent;
     text-align: center;
-    letter-spacing: 4px;
-    margin-bottom: 16px;
+    letter-spacing: 6px;
+    margin-bottom: 20px;
   }
-
   .pwd-box button {
     width: 100%;
     background: var(--dark);
     color: var(--cream);
     border: none;
-    padding: 12px;
+    padding: 16px;
     cursor: pointer;
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
     font-family: 'Montserrat', sans-serif;
+    border-radius: 2px;
   }
-
   .pwd-error {
     color: #c0392b;
     font-size: 11px;
@@ -609,11 +475,223 @@
     display: none;
   }
 
+  /* ── ADMIN OVERLAY ── */
+  .admin-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--cream);
+    z-index: 2000;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .admin-overlay.active { display: block; }
+
+  /* Top bar */
+  .admin-topbar {
+    background: var(--dark);
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .admin-topbar-title {
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  .admin-topbar-title span { color: var(--gold); font-style: italic; }
+  .admin-topbar-close {
+    background: none;
+    border: 1px solid rgba(184,150,90,0.5);
+    color: var(--gold);
+    padding: 8px 14px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 2px;
+  }
+
+  /* Collection block */
+  .admin-section {
+    padding: 20px;
+    border-bottom: 1px solid rgba(184,150,90,0.2);
+  }
+  .admin-section-title {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .collection-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .collection-row input {
+    flex: 1;
+    border: 1px solid rgba(184,150,90,0.4);
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    background: #fff;
+    outline: none;
+    color: var(--dark);
+  }
+  .collection-row input:focus { border-color: var(--gold); }
+  .btn-ok {
+    background: var(--dark);
+    color: var(--gold);
+    border: none;
+    padding: 12px 18px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    flex-shrink: 0;
+  }
+
+  /* Accordion article cards */
+  .admin-articles { padding: 16px 20px; }
+  .acc-card {
+    border: 1px solid rgba(184,150,90,0.25);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .acc-card.open { border-color: var(--gold); }
+
+  .acc-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .acc-thumb {
+    width: 48px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #e8e2d9;
+    flex-shrink: 0;
+  }
+  .acc-info { flex: 1; min-width: 0; }
+  .acc-info strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .acc-info span {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    display: block;
+  }
+  .acc-arrow {
+    color: var(--gold);
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: transform .3s;
+  }
+  .acc-card.open .acc-arrow { transform: rotate(180deg); }
+
+  .acc-body {
+    display: none;
+    padding: 0 16px 18px;
+    border-top: 1px solid rgba(184,150,90,0.15);
+  }
+  .acc-card.open .acc-body { display: block; }
+
+  /* Photo upload zone */
+  .photo-zone {
+    border: 2px dashed rgba(184,150,90,0.45);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    margin: 14px 0 16px;
+    cursor: pointer;
+    position: relative;
+    background: #faf8f5;
+  }
+  .photo-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .photo-zone-icon { font-size: 28px; margin-bottom: 6px; }
+  .photo-zone p { font-size: 13px; color: var(--dark); font-weight: 500; margin-bottom: 2px; }
+  .photo-zone small { font-size: 11px; color: var(--muted); }
+
+  /* Fields */
+  .acc-field { margin-bottom: 14px; }
+  .acc-field label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .acc-field input {
+    width: 100%;
+    border: 1px solid #e0dbd4;
+    border-radius: 6px;
+    padding: 13px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    outline: none;
+    color: var(--dark);
+    background: #fff;
+    transition: border-color .2s;
+  }
+  .acc-field input:focus { border-color: var(--gold); }
+
+  .btn-apply-mobile {
+    width: 100%;
+    background: var(--dark);
+    color: var(--cream);
+    border: none;
+    padding: 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 8px;
+    margin-top: 6px;
+    transition: background .2s;
+  }
+  .btn-apply-mobile.success { background: #27ae60; }
+
+  .admin-hint {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    padding: 20px;
+  }
+
   /* Responsive */
   @media (max-width: 700px) {
     .about { grid-template-columns: 1fr; }
     .about-deco { display: none; }
-    .admin-grid { grid-template-columns: 1fr; }
     nav { gap: 20px; }
     .card-wrap { width: 280px; height: 370px; }
   }
@@ -635,30 +713,27 @@
 
 <!-- ── ADMIN PANEL ── -->
 <div class="admin-overlay" id="adminOverlay">
-  <div class="admin-panel">
-    <div class="admin-header">
-      <h2>✦ Gestion Vitrine — Pontaillac</h2>
-      <button class="admin-close" onclick="closeAdmin()">✕ Fermer</button>
-    </div>
 
-    <!-- Bandeau collection -->
-    <div style="border:1px solid #e0e0e0;padding:20px;margin-bottom:32px;background:#fafafa;">
-      <div class="card-num" style="font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">Bandeau de collection</div>
-      <div class="admin-field">
-        <label>Texte affiché sous le logo</label>
-        <input type="text" id="collectionInput" value="Collection Printemps 2025" placeholder="ex: Nouveautés Été 2025">
-      </div>
-      <button class="btn-apply" onclick="applyCollection()" style="max-width:220px;">✓ Mettre à jour</button>
-    </div>
+  <div class="admin-topbar">
+    <div class="admin-topbar-title">✦ <span>Gestion</span> Vitrine</div>
+    <button class="admin-topbar-close" onclick="closeAdmin()">✕ Fermer</button>
+  </div>
 
-    <div class="admin-grid" id="adminGrid">
-      <!-- generated by JS -->
-    </div>
-
-    <div class="admin-footer">
-      Les modifications sont appliquées instantanément sur la vitrine.
+  <!-- Bandeau collection -->
+  <div class="admin-section">
+    <div class="admin-section-title">Bandeau de collection</div>
+    <div class="collection-row">
+      <input type="text" id="collectionInput" value="Collection Printemps 2025" placeholder="ex: Nouveautés Été 2025">
+      <button class="btn-ok" onclick="applyCollection()">OK</button>
     </div>
   </div>
+
+  <!-- Articles accordion -->
+  <div class="admin-articles" id="adminGrid">
+    <!-- generated by JS -->
+  </div>
+
+  <div class="admin-hint">Appuyez sur un article pour le modifier</div>
 </div>
 
 <!-- ── HEADER ── -->
@@ -804,46 +879,57 @@
     });
   }
 
-  // ── RENDER ADMIN ──
+  // ── RENDER ADMIN (mobile accordion) ──
   function renderAdmin() {
     const grid = document.getElementById('adminGrid');
     grid.innerHTML = '';
     items.forEach((item, i) => {
-      grid.innerHTML += `
-        <div class="admin-card">
-          <div class="card-num">Article ${i + 1}</div>
-          <img class="admin-preview" id="prev-${i}" src="${item.imgSrc}" alt="">
-          <div class="admin-field">
-            <label>Image (URL ou fichier)</label>
-            <input type="url" id="img-${i}" value="${item.imgSrc}" placeholder="https://...">
+      const card = document.createElement('div');
+      card.className = 'acc-card';
+      card.id = `acc-${i}`;
+      card.innerHTML = `
+        <div class="acc-header" onclick="toggleAcc(${i})">
+          <img class="acc-thumb" id="prev-${i}" src="${item.imgSrc}" alt="" onerror="this.style.background='#e8e2d9'">
+          <div class="acc-info">
+            <strong>${item.name}</strong>
+            <span>${item.brand} · ${item.price} €</span>
           </div>
-          <div class="admin-field">
-            <label>Ou choisir un fichier</label>
-            <input type="file" accept="image/*" onchange="previewFile(this, ${i})">
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body">
+          <div class="photo-zone">
+            <input type="file" accept="image/*" onchange="previewFile(this,${i})">
+            <div class="photo-zone-icon">📷</div>
+            <p>Changer la photo</p>
+            <small>Galerie ou appareil photo</small>
           </div>
-          <div class="admin-field">
+          <div class="acc-field">
             <label>Marque</label>
             <input type="text" id="brand-${i}" value="${item.brand}">
           </div>
-          <div class="admin-field">
+          <div class="acc-field">
             <label>Nom du vêtement</label>
             <input type="text" id="name-${i}" value="${item.name}">
           </div>
-          <div class="admin-field">
+          <div class="acc-field">
             <label>Prix (€)</label>
-            <input type="text" id="price-${i}" value="${item.price}">
+            <input type="text" id="price-${i}" value="${item.price}" inputmode="numeric">
           </div>
-          <div class="admin-field">
+          <div class="acc-field">
             <label>Étiquette (ex: Nouveauté)</label>
             <input type="text" id="tag-${i}" value="${item.tag}">
           </div>
-          <div class="admin-field">
-            <label>Tailles disponibles</label>
-            <input type="text" id="size-${i}" value="${item.size}">
-          </div>
-          <button class="btn-apply" onclick="applyCard(${i})">✓ Appliquer</button>
+          <button class="btn-apply-mobile" id="applybtn-${i}" onclick="applyCard(${i})">✓ Appliquer</button>
         </div>`;
+      grid.appendChild(card);
     });
+  }
+
+  function toggleAcc(i) {
+    const card = document.getElementById(`acc-${i}`);
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.acc-card').forEach(c => c.classList.remove('open'));
+    if (!isOpen) card.classList.add('open');
   }
 
   function previewFile(input, i) {
@@ -851,33 +937,31 @@
     const reader = new FileReader();
     reader.onload = e => {
       document.getElementById(`prev-${i}`).src = e.target.result;
-      document.getElementById(`img-${i}`).value = e.target.result;
+      items[i].imgSrc = e.target.result;
     };
     reader.readAsDataURL(input.files[0]);
   }
 
   function applyCard(i) {
-    items[i].imgSrc  = document.getElementById(`img-${i}`).value;
-    items[i].brand   = document.getElementById(`brand-${i}`).value;
-    items[i].name    = document.getElementById(`name-${i}`).value;
-    items[i].price   = document.getElementById(`price-${i}`).value;
-    items[i].tag     = document.getElementById(`tag-${i}`).value;
-    items[i].size    = document.getElementById(`size-${i}`).value;
+    items[i].brand = document.getElementById(`brand-${i}`).value;
+    items[i].name  = document.getElementById(`name-${i}`).value;
+    items[i].price = document.getElementById(`price-${i}`).value;
+    items[i].tag   = document.getElementById(`tag-${i}`).value;
     renderVitrine();
-    // flash feedback
-    const btn = event.target;
+    const btn = document.getElementById(`applybtn-${i}`);
     btn.textContent = '✓ Appliqué !';
-    btn.style.background = '#2ecc71';
-    setTimeout(() => { btn.textContent = '✓ Appliquer'; btn.style.background = ''; }, 1800);
+    btn.classList.add('success');
+    setTimeout(() => { btn.textContent = '✓ Appliquer'; btn.classList.remove('success'); }, 2000);
   }
 
   function applyCollection() {
     const val = document.getElementById('collectionInput').value.trim();
     if (val) document.getElementById('collectionLabel').textContent = val;
     const btn = event.target;
-    btn.textContent = '✓ Mis à jour !';
-    btn.style.background = '#2ecc71';
-    setTimeout(() => { btn.textContent = '✓ Mettre à jour'; btn.style.background = ''; }, 1800);
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.style.background = '#27ae60';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1800);
   }
 
   // ── ADMIN AUTH ──
