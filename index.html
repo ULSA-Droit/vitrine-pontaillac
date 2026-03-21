@@ -262,12 +262,15 @@
   }
   async function uploadPhoto(blob, articleId) {
     const path = `article-${articleId}-${Date.now()}.jpg`;
+    const file = new File([blob], path, { type: 'image/jpeg' });
+    const form = new FormData();
+    form.append('', file);
     const r = await fetch(`${SUPA_URL}/storage/v1/object/${BUCKET}/${path}`, {
       method: 'POST',
-      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'image/jpeg', 'x-upsert': 'true' },
-      body: blob
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'x-upsert': 'true' },
+      body: form
     });
-    if (!r.ok) throw new Error('Upload failed');
+    if (!r.ok) { const t = await r.text(); throw new Error(t); }
     return `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${path}`;
   }
 
