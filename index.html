@@ -151,73 +151,26 @@
   .btn-add-article:hover { border-color: var(--gold); background: rgba(184,150,90,0.05); }
   .admin-hint { text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 1px; padding: 20px; }
 
-  /* CONTACT CARD */
-  .contact-section { padding: 80px 20px; background: var(--cream); text-align: center; }
-  .contact-section .section-label { font-size: 10px; letter-spacing: 5px; color: var(--gold); text-transform: uppercase; margin-bottom: 40px; }
-  .contact-card {
-    display: inline-block;
-    background: var(--dark);
-    padding: 48px 56px;
-    position: relative;
-    max-width: 480px;
-    width: 100%;
-    overflow: hidden;
-  }
-  .contact-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-  .contact-card::after {
-    content: '✦';
-    position: absolute;
-    bottom: -20px; right: 20px;
-    font-size: 6rem;
-    color: rgba(184,150,90,0.06);
-    font-family: 'Playfair Display', serif;
-  }
-  .contact-card-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    color: var(--cream);
-    font-weight: 400;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
+  /* CONTACT OVERLAY */
+  .contact-overlay { display: none; position: fixed; inset: 0; background: rgba(26,23,20,0.8); z-index: 1500; align-items: center; justify-content: center; padding: 20px; }
+  .contact-overlay.active { display: flex; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .contact-card { background: #1a1714; padding: 48px 56px; position: relative; max-width: 420px; width: 100%; overflow: hidden; animation: slideUp .35s ease; }
+  @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .contact-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #b8965a, transparent); }
+  .contact-card::after { content: '✦'; position: absolute; bottom: -20px; right: 20px; font-size: 6rem; color: rgba(184,150,90,0.06); font-family: 'Playfair Display', serif; }
+  .contact-card-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--cream); font-weight: 400; letter-spacing: 1px; margin-bottom: 4px; }
   .contact-card-name em { color: var(--gold); font-style: italic; }
-  .contact-card-sub {
-    font-size: 9px;
-    letter-spacing: 4px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 32px;
-  }
-  .contact-divider { width: 40px; height: 1px; background: var(--gold); margin: 0 auto 32px; opacity: 0.5; }
-  .contact-line {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: opacity .2s;
-  }
-  .contact-line:last-child { margin-bottom: 0; }
+  .contact-card-sub { font-size: 9px; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; margin-bottom: 32px; }
+  .contact-divider { width: 40px; height: 1px; background: var(--gold); margin-bottom: 32px; opacity: 0.5; }
+  .contact-line { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; text-decoration: none; cursor: pointer; transition: opacity .2s; }
   .contact-line:hover { opacity: 0.75; }
-  .contact-icon {
-    width: 36px; height: 36px;
-    border: 1px solid rgba(184,150,90,0.3);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
-    color: var(--gold);
-  }
+  .contact-icon { width: 36px; height: 36px; border: 1px solid rgba(184,150,90,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; color: var(--gold); }
   .contact-info { text-align: left; }
   .contact-info-label { font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
   .contact-info-value { font-size: 14px; color: var(--cream); letter-spacing: 0.5px; }
+  .contact-back { width: 100%; background: none; border: 1px solid rgba(184,150,90,0.3); color: var(--gold); padding: 12px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: 'Montserrat', sans-serif; margin-top: 28px; transition: background .2s; }
+  .contact-back:hover { background: rgba(184,150,90,0.1); }
 
   @media (max-width: 700px) {
     .about { grid-template-columns: 1fr; }
@@ -288,8 +241,8 @@
   <h1>La <em>Vitrine</em> de Pontaillac</h1>
   <p class="tagline">Prêt-à-porter féminin · Royan</p>
   <nav>
-    <a href="#">Accueil</a>
-    <a href="#">Contact</a>
+    <a href="#" onclick="showAccueil(event)">Accueil</a>
+    <a href="#" onclick="showContact(event)">Contact</a>
   </nav>
 </header>
 
@@ -318,9 +271,9 @@
   <div class="about-deco">Mode</div>
 </div>
 
-<section class="contact-section" id="contact">
-  <p class="section-label">Nous contacter</p>
-  <div class="contact-card">
+<!-- CONTACT OVERLAY -->
+<div class="contact-overlay" id="contactOverlay" onclick="closeContactOnBg(event)">
+  <div class="contact-card" id="contactCard">
     <div class="contact-card-name">La <em>Vitrine</em> de Pontaillac</div>
     <div class="contact-card-sub">Prêt-à-porter féminin · Royan</div>
     <div class="contact-divider"></div>
@@ -338,8 +291,9 @@
         <div class="contact-info-value" id="contact-email-val">…</div>
       </div>
     </a>
+    <button class="contact-back" onclick="closeContact()">← Retour</button>
   </div>
-</section>
+</div>
 
 <footer>
   <p class="footer-brand">La Vitrine de Pontaillac</p>
@@ -649,7 +603,23 @@
     }
   }
 
-  function closePwd() { document.getElementById('pwdModal').classList.remove('active'); }
+  function showContact(e) {
+    e.preventDefault();
+    document.getElementById('contactOverlay').classList.add('active');
+  }
+  function closeContact() {
+    document.getElementById('contactOverlay').classList.remove('active');
+  }
+  function closeContactOnBg(e) {
+    if (e.target === document.getElementById('contactOverlay')) closeContact();
+  }
+  function showAccueil(e) {
+    e.preventDefault();
+    closeContact();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+ document.getElementById('pwdModal').classList.remove('active'); }
   function closeAdmin() { document.getElementById('adminOverlay').classList.remove('active'); }
 
   async function init() {
