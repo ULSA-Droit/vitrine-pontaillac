@@ -619,7 +619,7 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
- document.getElementById('pwdModal').classList.remove('active'); }
+  function closePwd() { document.getElementById('pwdModal').classList.remove('active'); }
   function closeAdmin() { document.getElementById('adminOverlay').classList.remove('active'); }
 
   async function init() {
