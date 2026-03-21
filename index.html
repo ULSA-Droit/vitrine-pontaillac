@@ -238,7 +238,6 @@
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsbWhkdW5panVrY2FrbnRjeGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDA0MTAsImV4cCI6MjA4OTY3NjQxMH0.hsj_p-GXLTioIurPFI9Lsf9XGwpzi9iHhfYJTQxb9JA';
   const BUCKET   = 'vitrine-photos';
 
-  
   const PWD_HASH = '0e214538b174f62a96ccf1a9ac7254b364c3769308e709e65d812118e10c68d5';
 
   const H = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
@@ -262,13 +261,16 @@
   }
   async function uploadPhoto(blob, articleId) {
     const path = `article-${articleId}-${Date.now()}.jpg`;
-    const file = new File([blob], path, { type: 'image/jpeg' });
-    const form = new FormData();
-    form.append('', file);
     const r = await fetch(`${SUPA_URL}/storage/v1/object/${BUCKET}/${path}`, {
       method: 'POST',
-      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'x-upsert': 'true' },
-      body: form
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'image/jpeg',
+        'Cache-Control': '3600',
+        'x-upsert': 'true'
+      },
+      body: blob
     });
     if (!r.ok) { const t = await r.text(); throw new Error(t); }
     return `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${path}`;
