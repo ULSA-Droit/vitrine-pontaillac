@@ -145,6 +145,10 @@
   .btn-apply-mobile { width: 100%; background: var(--dark); color: var(--cream); border: none; padding: 16px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: 'Montserrat', sans-serif; border-radius: 8px; margin-top: 6px; transition: background .2s; }
   .btn-apply-mobile.success { background: #27ae60; }
   .btn-apply-mobile:disabled { background: var(--muted); cursor: not-allowed; }
+  .btn-delete-mobile { width: 100%; background: none; color: #c0392b; border: 1px solid #c0392b; padding: 13px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: 'Montserrat', sans-serif; border-radius: 8px; margin-top: 8px; transition: background .2s, color .2s; }
+  .btn-delete-mobile:hover { background: #c0392b; color: #fff; }
+  .btn-add-article { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: none; border: 2px dashed rgba(184,150,90,0.4); color: var(--gold); padding: 18px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: 'Montserrat', sans-serif; border-radius: 10px; margin-top: 4px; transition: border-color .2s, background .2s; }
+  .btn-add-article:hover { border-color: var(--gold); background: rgba(184,150,90,0.05); }
   .admin-hint { text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 1px; padding: 20px; }
 
   @media (max-width: 700px) {
@@ -187,6 +191,9 @@
     </div>
   </div>
   <div class="admin-articles" id="adminGrid"></div>
+  <div style="padding:0 20px 20px;">
+    <button class="btn-add-article" onclick="addArticle()">＋ Ajouter un article</button>
+  </div>
   <div class="admin-hint">Appuyez sur un article pour le modifier</div>
 </div>
 
@@ -351,6 +358,7 @@
           <div class="acc-field"><label>Prix (€)</label><input type="text" id="price-${i}" value="${item.price}" inputmode="numeric"></div>
           <div class="acc-field"><label>Étiquette</label><input type="text" id="tag-${i}" value="${item.tag}"></div>
           <button class="btn-apply-mobile" id="applybtn-${i}" onclick="applyCard(${i})">✓ Appliquer</button>
+          <button class="btn-delete-mobile" onclick="deleteArticle(${i})">🗑 Supprimer cet article</button>
         </div>`;
       grid.appendChild(card);
     });
@@ -411,7 +419,61 @@
     }
   }
 
-  async function applyCollection() {
+  async function deleteArticle(i) {
+    if (!confirm('Supprimer cet article et sa photo ?')) return;
+    const item = items.find(x => x.id === i);
+    try {
+      // Supprimer la photo du storage si c'est une URL Supabase
+      if (item.img_url && item.img_url.includes(SUPA_URL)) {
+        const path = item.img_url.split(`/object/public/${BUCKET}/`)[1];
+        if (path) {
+          await fetch(`${SUPA_URL}/storage/v1/object/${BUCKET}/${path}`, {
+            method: 'DELETE',
+            headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+          });
+        }
+      }
+      // Supprimer l'article en base
+      await fetch(`${SUPA_URL}/rest/v1/articles?id=eq.${i}`, {
+        method: 'DELETE',
+        headers: { ...H, 'Prefer': 'return=minimal' }
+      });
+      items = items.filter(x => x.id !== i);
+      renderVitrine();
+      renderAdmin();
+    } catch(e) {
+      alert('Erreur lors de la suppression, réessayez.');
+    }
+  }
+
+  async function addArticle() {
+    const newId = items.length > 0 ? Math.max(...items.map(x => x.id)) + 1 : 0;
+    const newItem = {
+      id: newId,
+      img_url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+      brand: 'Marque',
+      name: 'Nouveau vêtement',
+      price: '0',
+      tag: 'Nouveau',
+      size: 'Taille unique'
+    };
+    try {
+      await fetch(`${SUPA_URL}/rest/v1/articles`, {
+        method: 'POST',
+        headers: { ...H, 'Prefer': 'return=minimal' },
+        body: JSON.stringify(newItem)
+      });
+      items.push(newItem);
+      renderVitrine();
+      renderAdmin();
+      // Ouvrir directement le nouvel article
+      setTimeout(() => toggleAcc(newId), 100);
+    } catch(e) {
+      alert('Erreur lors de l\'ajout, réessayez.');
+    }
+  }
+
+
     const val = document.getElementById('collectionInput').value.trim();
     if (!val) return;
     const btn = document.getElementById('collectionBtn');
